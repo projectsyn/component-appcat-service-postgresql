@@ -1,0 +1,5 @@
+= appcat-service-postgresql
+
+appcat-service-postgresql is a Commodore component to manage appcat-service-postgresql.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.

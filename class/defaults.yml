@@ -1,0 +1,4 @@
+parameters:
+  appcat_service_postgresql:
+    =_metadata: {}
+    namespace: syn-appcat-service-postgresql
