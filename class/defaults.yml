@@ -1,4 +1,10 @@
 parameters:
   appcat_service_postgresql:
     =_metadata: {}
-    namespace: syn-appcat-service-postgresql
+    namespace: appcat-service-postgresql
+    charts:
+      appcat-service-postgresql:
+        source: https://vshn.github.io/appcat-service-postgresql
+        chart: provider-postgresql
+        version: 0.1.2
+    helmValues: {}

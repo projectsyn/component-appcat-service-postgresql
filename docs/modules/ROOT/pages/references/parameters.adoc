@@ -6,14 +6,23 @@ The parent key for all of the following parameters is `appcat_service_postgresql
 
 [horizontal]
 type:: string
-default:: `syn-appcat-service-postgresql`
+default:: `appcat-service-postgresql`
 
 The namespace in which to deploy this component.
 
+== `charts`
 
-== Example
+[horizontal]
+type:: dict
+default:: See `class/defaults.yml`
 
-[source,yaml]
-----
-namespace: example-namespace
-----
+The default AppCat Service PostgreSQL Helm chart version to use.
+
+== `helmValues`
+
+[horizontal]
+type:: dict
+default:: See `class/defaults.yml`
+
+Values passed to Helm.
+See https://github.com/vshn/appcat-service-postgresql/tree/master/charts/provider-postgresql[chart README] for a list of possible parameters.

@@ -1,2 +1,7 @@
 * xref:index.adoc[Home]
+
+.Tutorials
+* xref:tutorials/installation.adoc[Installation]
+
+.Technical reference
 * xref:references/parameters.adoc[Parameters]
