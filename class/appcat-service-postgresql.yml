@@ -1,6 +1,24 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: helm
+        source: ${appcat_service_postgresql:charts:appcat-service-postgresql:source}
+        chart_name: ${appcat_service_postgresql:charts:appcat-service-postgresql:chart}
+        version: ${appcat_service_postgresql:charts:appcat-service-postgresql:version}
+        output_path: dependencies/appcat-service-postgresql/helmcharts/appcat-service-postgresql-${appcat_service_postgresql:charts:appcat-service-postgresql:version}
+      - type: https
+        source: https://github.com/vshn/appcat-service-postgresql/releases/download/provider-postgresql-${appcat_service_postgresql:charts:appcat-service-postgresql:version}/crds.yaml
+        output_path: dependencies/appcat-service-postgresql/manifests/${appcat_service_postgresql:charts:appcat-service-postgresql:version}/crds/crds.yaml
     compile:
+      - input_paths:
+          - appcat-service-postgresql/helmcharts/appcat-service-postgresql-${appcat_service_postgresql:charts:appcat-service-postgresql:version}
+        input_type: helm
+        output_type: yaml
+        output_path: appcat-service-postgresql/01_helmchart
+        helm_values: ${appcat_service_postgresql:helmValues}
+        helm_params:
+          name: appcat-service-postgresql
+          namespace: ${appcat_service_postgresql:namespace}
       - input_paths:
           - appcat-service-postgresql/component/app.jsonnet
         input_type: jsonnet
@@ -9,3 +27,8 @@ parameters:
           - appcat-service-postgresql/component/main.jsonnet
         input_type: jsonnet
         output_path: appcat-service-postgresql/
+      - input_paths:
+          - dependencies/appcat-service-postgresql/manifests/${appcat_service_postgresql:charts:appcat-service-postgresql:version}/crds/
+        input_type: copy
+        output_type: yaml
+        output_path: appcat-service-postgresql/01_helmchart/provider-postgresql/crds/

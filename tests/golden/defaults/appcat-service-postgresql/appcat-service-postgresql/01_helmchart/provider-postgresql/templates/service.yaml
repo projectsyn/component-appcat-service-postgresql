@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: appcat-service-postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: provider-postgresql
+    helm.sh/chart: provider-postgresql-0.1.2
+  name: appcat-service-postgresql-provider-postgresql
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: webhook
+      port: 443
+      protocol: TCP
+      targetPort: webhook
+  selector:
+    app.kubernetes.io/instance: appcat-service-postgresql
+    app.kubernetes.io/name: provider-postgresql
+  type: ClusterIP

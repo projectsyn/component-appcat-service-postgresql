@@ -1,0 +1,35 @@
+= Tutorial: Installation
+
+This tutorial will guide you through the required steps to install AppCat Service PostgreSQL.
+The component performs the Operator installation via its https://github.com/vshn/appcat-service-postgresql/tree/master/charts/provider-postgresql[Helm Chart].
+The Crossplane Helm provider is a necessary dependency for the service to work.
+
+== Installation
+
+. Install https://github.com/projectsyn/component-crossplane[component-crossplane] with the following configuration (version >= `v2.0.0`):
++
+[source,yaml]
+----
+parameters:
+  crossplane:
+    providers:
+      helm: <1>
+        package: crossplane/provider-helm:v0.10.0 <2>
+----
+<1> Let Crossplane manage `provider-helm` CRDs and controller
+<2> The Crossplane package image and version for `provider-helm`
+
+. Configure `component-appcat-service-postgresql`:
++
+[source,yaml]
+----
+parameters:
+  appcat_service_postgresql:
+    #helm_values: {} <1>
+----
+<1> Custom Helm values that differ from the defaults.
+
+. Compile and push cluster catalog
+
+
+
