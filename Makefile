@@ -1,3 +1,9 @@
+#
+# File managed by ModuleSync - Do Not Edit
+#
+# Additional Makefiles can be added to `.sync.yml` in 'Makefile.includes'
+#
+
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
@@ -60,10 +66,6 @@ gen-golden: clean .compile ## Update the reference version for target `golden-di
 golden-diff: commodore_args += -f tests/$(instance).yml
 golden-diff: clean .compile ## Diff compile output against the reference version. Review output and run `make gen-golden golden-diff` if this target fails.
 	@git diff --exit-code --minimal --no-index -- tests/golden/$(instance) compiled/
-
-.PHONY: $(test_instances)
-$(test_instances):
-	$(MAKE) $(recursive_target) -e instance=$(basename $(@F))
 
 .PHONY: clean
 clean: ## Clean the project
