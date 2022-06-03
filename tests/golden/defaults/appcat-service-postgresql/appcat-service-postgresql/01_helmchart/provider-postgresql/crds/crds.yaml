@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: postgresqlstandaloneoperatorconfigs.postgresql.appcat.vshn.io
 spec:
@@ -139,18 +139,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: postgresqlstandalones.postgresql.appcat.vshn.io
 spec:
@@ -220,6 +214,13 @@ spec:
                           x-kubernetes-int-or-string: true
                       type: object
                   type: object
+                writeConnectionSecretToRef:
+                  description: ConnectionSecretRef contains the reference where connection details should be made available.
+                  properties:
+                    name:
+                      description: Name is the Secret name to where the connection details should be written to after creating an instance.
+                      type: string
+                  type: object
               type: object
             status:
               description: PostgresqlStandaloneStatus represents the observed state of a PostgresqlStandalone.
@@ -273,7 +274,11 @@ spec:
                 helmChart:
                   description: HelmChart is the observed deployed Helm chart version.
                   properties:
+                    deploymentNamespace:
+                      description: DeploymentNamespace is the observed namespace name where the instance is deployed.
+                      type: string
                     modifiedAt:
+                      description: ModifiedTime is the timestamp when the helm release has been last seen become ready.
                       format: date-time
                       type: string
                     name:
@@ -298,9 +303,3 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

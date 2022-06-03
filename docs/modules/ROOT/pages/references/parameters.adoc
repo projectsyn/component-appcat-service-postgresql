@@ -25,4 +25,4 @@ type:: dict
 default:: See `class/defaults.yml`
 
 Values passed to Helm.
-See https://github.com/vshn/appcat-service-postgresql/tree/master/charts/provider-postgresql[chart README] for a list of possible parameters.
+See https://github.com/vshn/appcat-service-postgresql/blob/provider-postgresql-0.1.7/charts/provider-postgresql/values.yaml[the Helm chart] for a list of possible parameters.

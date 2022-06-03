@@ -6,5 +6,5 @@ parameters:
       appcat-service-postgresql:
         source: https://vshn.github.io/appcat-service-postgresql
         chart: provider-postgresql
-        version: 0.1.2
+        version: 0.1.7
     helmValues: {}
