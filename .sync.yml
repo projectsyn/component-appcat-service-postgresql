@@ -3,10 +3,6 @@
   githubUrl: https://github.com/projectsyn/component-appcat-service-postgresql
   feature_goldenTests: true
 
-docs/antora.yml:
-  name: appcat-service-postgresql
-  title: appcat-service-postgresql
-
 .github/workflows/test.yaml:
   makeTarget: test -e instance=${{ matrix.instance }}
   goldenTest_makeTarget: golden-diff -e instance=${{ matrix.instance }}
