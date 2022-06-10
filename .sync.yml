@@ -2,6 +2,10 @@
   componentName: appcat-service-postgresql
   githubUrl: https://github.com/projectsyn/component-appcat-service-postgresql
   feature_goldenTests: true
+  testMatrix:
+    key: instance
+    values:
+      - defaults
 
 .github/workflows/test.yaml:
   makeTarget: test -e instance=${{ matrix.instance }}
