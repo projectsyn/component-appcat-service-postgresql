@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/instance: appcat-service-postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: provider-postgresql
-    helm.sh/chart: provider-postgresql-0.1.2
+    helm.sh/chart: provider-postgresql-0.1.7
   name: appcat-service-postgresql-provider-postgresql
 spec:
   replicas: 1
