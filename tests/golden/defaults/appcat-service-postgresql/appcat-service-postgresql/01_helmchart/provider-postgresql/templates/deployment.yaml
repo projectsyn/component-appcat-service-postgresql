@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/instance: appcat-service-postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: provider-postgresql
-    helm.sh/chart: provider-postgresql-0.1.2
+    helm.sh/chart: provider-postgresql-0.4.0
   name: appcat-service-postgresql-provider-postgresql
 spec:
   replicas: 1
@@ -29,7 +29,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           image: ghcr.io/vshn/appcat-service-postgresql:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: operator
           ports:
             - containerPort: 9443
@@ -46,4 +46,4 @@ spec:
       volumes:
         - name: webhook-tls
           secret:
-            secretName: appcat-service-postgresql-provider-postgresql-webhook-tls
+            secretName: webhook-tls

@@ -5,83 +5,38 @@ metadata:
     app.kubernetes.io/instance: appcat-service-postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: provider-postgresql
-    helm.sh/chart: provider-postgresql-0.1.2
-  name: appcat-service-postgresql-provider-postgresql
+    helm.sh/chart: provider-postgresql-0.4.0
+    rbac.authorization.k8s.io/aggregate-to-view: 'true'
+  name: appcat-service-postgresql-provider-postgresql-view
 rules:
   - apiGroups:
-      - coordination.k8s.io
+      - postgresql.appcat.vshn.io
     resources:
-      - leases
-    verbs:
-      - create
-      - get
-      - list
-      - update
-  - apiGroups:
-      - ''
-    resources:
-      - namespaces
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - ''
-    resources:
-      - secrets
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - helm.crossplane.io
-    resources:
-      - providerconfigs
+      - postgresqlstandalones
     verbs:
       - get
       - list
-      - watch
-  - apiGroups:
-      - helm.crossplane.io
-    resources:
-      - releases
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
       - watch
   - apiGroups:
       - postgresql.appcat.vshn.io
     resources:
-      - postgresqlstandaloneoperatorconfigs
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - postgresql.appcat.vshn.io
-    resources:
-      - postgresqlstandaloneoperatorconfigs/finalizers
-      - postgresqlstandaloneoperatorconfigs/status
+      - postgresqlstandalones/finalizers
+      - postgresqlstandalones/status
     verbs:
       - get
-      - patch
-      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/instance: appcat-service-postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: provider-postgresql
+    helm.sh/chart: provider-postgresql-0.4.0
+    rbac.authorization.k8s.io/aggregate-to-admin: 'true'
+    rbac.authorization.k8s.io/aggregate-to-edit: 'true'
+  name: appcat-service-postgresql-provider-postgresql-edit
+rules:
   - apiGroups:
       - postgresql.appcat.vshn.io
     resources:
@@ -94,12 +49,3 @@ rules:
       - patch
       - update
       - watch
-  - apiGroups:
-      - postgresql.appcat.vshn.io
-    resources:
-      - postgresqlstandalones/finalizers
-      - postgresqlstandalones/status
-    verbs:
-      - get
-      - patch
-      - update
