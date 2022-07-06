@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: webhook-tls
   labels:
     app.kubernetes.io/instance: appcat-service-postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: provider-postgresql
-    helm.sh/chart: provider-postgresql-0.1.2
+    helm.sh/chart: provider-postgresql-0.4.0
   name: appcat-service-postgresql-provider-postgresql
 spec:
   ports:

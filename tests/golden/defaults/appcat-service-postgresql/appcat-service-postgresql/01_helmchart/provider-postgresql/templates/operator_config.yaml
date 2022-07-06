@@ -1,0 +1,33 @@
+apiVersion: postgresql.appcat.vshn.io/v1alpha1
+kind: PostgresqlStandaloneOperatorConfig
+metadata:
+  labels:
+    app.kubernetes.io/instance: appcat-service-postgresql
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: provider-postgresql
+    helm.sh/chart: provider-postgresql-0.4.0
+    postgresql.appcat.vshn.io/major-version: v14
+  name: config-v14
+spec:
+  defaultDeploymentStrategy: HelmChart
+  helmProviderConfigReference: provider-helm
+  helmReleaseTemplate:
+    chart:
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.1.23
+    values:
+      primary:
+        containerSecurityContext:
+          enabled: false
+        podSecurityContext:
+          enabled: false
+      volumePermissions:
+        enabled: false
+        securityContext:
+          runAsUser: auto
+  helmReleases: []
+  persistence:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: ssd

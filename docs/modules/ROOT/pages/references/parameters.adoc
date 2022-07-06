@@ -26,3 +26,5 @@ default:: See `class/defaults.yml`
 
 Values passed to Helm.
 See https://github.com/vshn/appcat-service-postgresql/tree/master/charts/provider-postgresql[chart README] for a list of possible parameters.
+
+NOTE: The defaults are currently optimized to run on cloudscale.ch on OpenShift 4.

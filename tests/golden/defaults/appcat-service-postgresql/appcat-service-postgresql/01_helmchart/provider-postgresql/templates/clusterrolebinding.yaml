@@ -5,12 +5,12 @@ metadata:
     app.kubernetes.io/instance: appcat-service-postgresql
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: provider-postgresql
-    helm.sh/chart: provider-postgresql-0.1.2
+    helm.sh/chart: provider-postgresql-0.4.0
   name: appcat-service-postgresql-provider-postgresql
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: appcat-service-postgresql-provider-postgresql
+  name: appcat-service-postgresql-provider-postgresql-manager
 subjects:
   - kind: ServiceAccount
     name: appcat-service-postgresql-provider-postgresql

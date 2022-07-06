@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: postgresqlstandaloneoperatorconfigs.postgresql.appcat.vshn.io
 spec:
@@ -35,6 +35,74 @@ spec:
             spec:
               description: A PostgresqlStandaloneOperatorConfigSpec defines the desired state of a PostgresqlStandaloneOperatorConfig.
               properties:
+                backupConfigSpec:
+                  description: BackupConfigSpec defines settings for instance backups.
+                  properties:
+                    s3BucketSecret:
+                      description: S3BucketSecret configures the bucket settings for backup buckets.
+                      properties:
+                        accessKeyRef:
+                          description: AccessKeyRef selects the access key credential for the bucket.
+                          properties:
+                            key:
+                              description: The key of the secret to select from.  Must be a valid secret key.
+                              type: string
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                            optional:
+                              description: Specify whether the Secret or its key must be defined
+                              type: boolean
+                          required:
+                            - key
+                          type: object
+                        bucketRef:
+                          description: BucketRef selects the secret and key for retrieving the bucket name.
+                          properties:
+                            key:
+                              description: The key of the secret to select from.  Must be a valid secret key.
+                              type: string
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                            optional:
+                              description: Specify whether the Secret or its key must be defined
+                              type: boolean
+                          required:
+                            - key
+                          type: object
+                        endpointRef:
+                          description: EndpointRef selects the secret and key for retrieving the endpoint name.
+                          properties:
+                            key:
+                              description: The key of the secret to select from.  Must be a valid secret key.
+                              type: string
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                            optional:
+                              description: Specify whether the Secret or its key must be defined
+                              type: boolean
+                          required:
+                            - key
+                          type: object
+                        secretKeyRef:
+                          description: SecretKeyRef selects the secret key credential for the bucket.
+                          properties:
+                            key:
+                              description: The key of the secret to select from.  Must be a valid secret key.
+                              type: string
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                            optional:
+                              description: Specify whether the Secret or its key must be defined
+                              type: boolean
+                          required:
+                            - key
+                          type: object
+                      type: object
+                  type: object
                 defaultDeploymentStrategy:
                   description: DeploymentStrategy defines the DeploymentStrategy in case there isn't a 1:1 match.
                   type: string
@@ -92,6 +160,17 @@ spec:
                         x-kubernetes-preserve-unknown-fields: true
                     type: object
                   type: array
+                persistence:
+                  description: Persistence contains default PVC settings.
+                  properties:
+                    accessModes:
+                      items:
+                        type: string
+                      type: array
+                    storageClassName:
+                      description: storageClassName is the name of the StorageClass required by the claim.
+                      type: string
+                  type: object
                 resourceMaxima:
                   description: ResourceMaxima defines the maximum supported resources an instance can have.
                   properties:
@@ -139,18 +218,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.0
   creationTimestamp: null
   name: postgresqlstandalones.postgresql.appcat.vshn.io
 spec:
@@ -168,6 +241,9 @@ spec:
     - additionalPrinterColumns:
         - jsonPath: .status.conditions[?(@.type=='Ready')].status
           name: Ready
+          type: string
+        - jsonPath: .status.conditions[?(@.type=='Progressing')].status
+          name: Progressing
           type: string
         - jsonPath: .metadata.creationTimestamp
           name: Age
@@ -188,6 +264,13 @@ spec:
             spec:
               description: PostgresqlStandaloneSpec defines the desired state of a PostgresqlStandalone.
               properties:
+                backup:
+                  description: Backup configures the settings related to backing up the instance.
+                  properties:
+                    enabled:
+                      description: Enabled configures whether instances are generally being backed up.
+                      type: boolean
+                  type: object
                 forInstance:
                   description: Parameters defines the PostgreSQL specific settings.
                   properties:
@@ -219,6 +302,13 @@ spec:
                           pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                           x-kubernetes-int-or-string: true
                       type: object
+                  type: object
+                writeConnectionSecretToRef:
+                  description: ConnectionSecretRef contains the reference where connection details should be made available.
+                  properties:
+                    name:
+                      description: Name is the Secret name to where the connection details should be written to after creating an instance.
+                      type: string
                   type: object
               type: object
             status:
@@ -273,7 +363,11 @@ spec:
                 helmChart:
                   description: HelmChart is the observed deployed Helm chart version.
                   properties:
+                    deploymentNamespace:
+                      description: DeploymentNamespace is the observed namespace name where the instance is deployed.
+                      type: string
                     modifiedAt:
+                      description: ModifiedTime is the timestamp when the helm release has been last seen become ready.
                       format: date-time
                       type: string
                     name:
@@ -298,9 +392,3 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

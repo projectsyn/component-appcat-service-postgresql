@@ -6,5 +6,43 @@ parameters:
       appcat-service-postgresql:
         source: https://vshn.github.io/appcat-service-postgresql
         chart: provider-postgresql
-        version: 0.1.2
-    helmValues: {}
+        version: 0.4.0
+    helmValues:
+      image:
+        tag: latest
+        pullPolicy: Always
+      standaloneOperatorConfigs:
+        config-v14:
+          postgresMajorVersion: v14
+          spec:
+            defaultDeploymentStrategy: HelmChart
+            helmProviderConfigReference: provider-helm
+            helmReleaseTemplate:
+              chart:
+                name: postgresql
+                repository: https://charts.bitnami.com/bitnami
+                version: 11.1.23
+              values:
+                primary:
+                  containerSecurityContext:
+                    enabled: false
+                  podSecurityContext:
+                    enabled: false
+                volumePermissions:
+                  enabled: false
+                  securityContext:
+                    runAsUser: auto
+            helmReleases: []
+            persistence:
+              accessModes:
+                - ReadWriteOnce
+              storageClassName: ssd
+
+      # Openshift service-serving cert feature for webhooks
+      service:
+        annotations:
+          service.beta.openshift.io/serving-cert-secret-name: webhook-tls
+      webhook:
+        externalSecretName: webhook-tls
+        annotations:
+          service.beta.openshift.io/inject-cabundle: "true"
