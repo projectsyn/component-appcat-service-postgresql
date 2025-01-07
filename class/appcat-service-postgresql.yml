@@ -22,7 +22,7 @@ parameters:
       - input_paths:
           - appcat-service-postgresql/component/app.jsonnet
         input_type: jsonnet
-        output_path: apps/
+        output_path: .
       - input_paths:
           - appcat-service-postgresql/component/main.jsonnet
         input_type: jsonnet
